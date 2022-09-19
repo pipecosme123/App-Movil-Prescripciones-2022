@@ -109,7 +109,7 @@ const Prescripciones = ({ navigation }) => {
                </View>
                <Text>Telefono: {"425 5412"}</Text>
 
-               {/* <PrintToPDFs /> */}
+               <PrintToPDFs />
                {/* <Button
                   title="Generar Prescripción" style={styles.button}
                   onPress={() => console.log(productos)}
