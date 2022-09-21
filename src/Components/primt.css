@@ -1,0 +1,16 @@
+.seccionQR{
+   padding: 16px;
+   border-radius: 8px;
+   background: #d2010d;
+}
+
+.seccionQR h3{
+   color: #fff;
+   font-weight: 900;
+}
+
+.seccionQR img{
+   padding: 8px;
+   border-radius: 8px;
+   background: #fff;
+}
