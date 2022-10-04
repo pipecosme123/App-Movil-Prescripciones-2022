@@ -1,44 +1,98 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Dimensions, FlatList, Modal, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Dimensions, FlatList, Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import FormsInputs from '../Components/FormsInputs';
 import { Productos } from '../Constants/Productos';
+import FormsInputs from '../Components/FormsInputs';
 import TapsProductos from '../Components/TapsProductos';
 import ItemListPres from '../Components/ItemListPres';
-import PrintToPDFs from '../Components/PrintToPDFs';
+import { useForm } from '../Hooks/useForm';
 
 const windowWidth = Dimensions.get('window').width;
-const windowHeight = Dimensions.get('window').height;
+
+const initialForm = {
+   cedula: '',
+   nombre: '',
+   apellido: '',
+   productos: [],
+   recomendaciones: '',
+   doctor_name: 'Karel Busfield',
+   doctor_celula: '1143997339',
+   telefono: '3182599197'
+}
+
+const validationForm = (form) => {
+   let errors = {}
+
+   if (form['cedula'] === '') {
+      errors['cedula'] = "Debes llenar este campo";
+   } else if (form['cedula'].length > 15) {
+      errors["cedula"] = `Límite de caracteres superado. Límite máximo 15`;
+   }
+
+   if (form['nombre'] === '') {
+      errors['nombre'] = "Debes llenar este campo";
+   } else if (form['nombre'].length > 45) {
+      errors['nombre'] = `Límite de caracteres superado. Límite máximo 45`;
+   }
+
+   if (form['apellido'] === '') {
+      errors['apellido'] = "Debes llenar este campo";
+   } else if (form['apellido'].length > 45) {
+      errors['apellido'] = `Límite de caracteres superado. Límite máximo 45`;
+   }
+
+   if (form['productos'].length === 0) {
+      errors['productos'] = "Debes seleccionar como mínimo un producto";
+   }
+
+   if (form['recomendaciones'].length > 45) {
+      errors['recomendaciones'] = `Límite de caracteres superado. Límite máximo 45`;
+   }
+
+   return errors;
+}
 
 const Prescripciones = ({ navigation }) => {
 
-   const [info, setInfo] = useState({
-      cedula: '',
-      nombre: '',
-      apellido: '',
-      descripcion: ''
-   });
+   const {
+      form,
+      error,
+      showError,
+      loading,
+      responseApi,
+      handleChange,
+      handleProductos,
+      handleBlur,
+      handleSubmit
+   } = useForm(initialForm, validationForm);
 
    const [modalVisible, setModalVisible] = useState(false);
    const [productos, setProductos] = useState([]);
 
-   const months = ["ENE", "FEB", "MAR", "ABR", "MAY", "JUN", "JUL", "AGO", "SEP", "OCT", "NOV", "DIC"];
-   let date = new Date();
-
-   const onChangeItems = (data) => {
-      setInfo({
-         ...info,
-         [data.name]: data.value
-      })
+   const getFecha = () => {
+      let date = new Date();
+      const months = ["ENE", "FEB", "MAR", "ABR", "MAY", "JUN", "JUL", "AGO", "SEP", "OCT", "NOV", "DIC"];
+      const fechaActual = `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`;
+      return (fechaActual);
    }
 
+   // -------------- PROCESO -------------- \\
    const cargarProductos = async () => {
       await AsyncStorage.setItem('@productos', JSON.stringify(Productos))
    }
 
-   const handleProductos = (seleccion) => {
-      setProductos(seleccion)
-      setModalVisible(false)
+   const onHandleProductos = (seleccion) => {
+      handleProductos(seleccion);
+      setModalVisible(false);
+
+      console.log(seleccion.length, 'productos');
+
+      if (seleccion.length === 0) {
+         error.add({ productos: "Debes seleccionar como mínimo un producto" });
+      } else if (error.productos !== undefined) {
+         delete (error.productos)
+         // console.log(error, typeof error)
+      }
    }
 
    useEffect(() => {
@@ -50,20 +104,20 @@ const Prescripciones = ({ navigation }) => {
          <ScrollView horizontal={true}>
             <View style={styles.Prescripciones}>
                <Text style={styles.tituloPagina}>Generar Prescripción</Text>
-               <Text style={styles.nombreDoctor}>{`Dr(a).:`} Daniel Felipe Cosme</Text>
-               <Text style={[styles.seccion, styles.fecha]}>Fecha: {date.getDate()} {months[date.getMonth()]} {date.getFullYear()}</Text>
-               <View style={styles.seccion}>
-                  <FormsInputs label={'Nro. de cédula'} type={'numeric'} nameImput={'cedula'} placeholder={'C. C.'} items={info.cedula} onChangeItems={onChangeItems} />
+               {/* <Text style={styles.nombreDoctor}>{`Dr(a).:`} Daniel Felipe Cosme</Text>
+               <Text style={[styles.seccion, styles.fecha]}>Fecha: {getFecha()}</Text> */}
+               <View style={[styles.seccion, showError && error['cedula'] && styles.sessionError]}>
+                  <FormsInputs label={'Nro. de cédula'} type={'numeric'} nameImput={'cedula'} placeholder={'C. C.'} items={form.cedula} onChangeItems={handleChange} onBlurItems={handleBlur} onShowError={showError} error={error['cedula']} />
                </View>
-               <View style={styles.seccion}>
-                  <FormsInputs label={'Nombre del paciente'} type={'default'} nameImput={'nombre'} placeholder={'Nombre'} items={info.nombre} onChangeItems={onChangeItems} />
+               <View style={[styles.seccion, showError && error['nombre'] && styles.sessionError]}>
+                  <FormsInputs label={'Nombre del paciente'} type={'default'} nameImput={'nombre'} placeholder={'Nombre'} items={form.nombre} onChangeItems={handleChange} onBlurItems={handleBlur} onShowError={showError} error={error['nombre']} />
                </View>
-               <View style={styles.seccion}>
-                  <FormsInputs label={'Apellido del paciente'} type={'default'} nameImput={'apellido'} placeholder={'Apellido'} items={info.apellido} onChangeItems={onChangeItems} />
+               <View style={[styles.seccion, showError && error['apellido'] && styles.sessionError]}>
+                  <FormsInputs label={'Apellido del paciente'} type={'default'} nameImput={'apellido'} placeholder={'Apellido'} items={form.apellido} onChangeItems={handleChange} onBlurItems={handleBlur} onShowError={showError} error={error['apellido']} />
                </View>
 
                {/* ////////// MODAL \\\\\\\\\\ */}
-               <View style={styles.seccion}>
+               <View style={[styles.seccion, showError && error['productos'] && styles.sessionError]}>
 
                   <TouchableOpacity
                      style={styles.buttonOpenModal}
@@ -83,7 +137,7 @@ const Prescripciones = ({ navigation }) => {
                      >
                         <View style={styles.centeredView}>
                            <View style={styles.modalView}>
-                              <TapsProductos handleProductos={handleProductos} />
+                              <TapsProductos handleProductos={onHandleProductos} />
                            </View>
                         </View>
                      </Modal>
@@ -91,9 +145,9 @@ const Prescripciones = ({ navigation }) => {
 
                   <View style={styles.productosSeleccionados}>
                      <View>
-                        {productos.length !== 0 &&
+                        {form.productos.length !== 0 &&
                            <FlatList
-                              data={productos}
+                              data={form.productos}
                               keyExtractor={(key) => { return key.id }}
                               renderItem={({ item }) => (
                                  <ItemListPres img={item.img} title={item.name} />
@@ -102,23 +156,21 @@ const Prescripciones = ({ navigation }) => {
                         }
                      </View>
                   </View>
+                  {showError && form.productos.length === 0 &&
+                     <Text style={styles.textError}>{error['productos']}</Text>
+                  }
                </View>
 
-               <View style={styles.seccion}>
-                  <FormsInputs label={'Descripción'} type={'default'} nameImput={'descripcion'} placeholder={'Descripción'} multiline={true} items={info.descripcion} onChangeItems={onChangeItems} />
+               <View style={[styles.seccion, error['recomendaciones'] && styles.sessionError]}>
+                  <FormsInputs label={'Recomendaciones Adicionales'} type={'default'} nameImput={'recomendaciones'} placeholder={'Recomendaciones'} multiline={true} items={form.recomendaciones} onChangeItems={handleChange} onBlurItems={handleBlur} onShowError={showError} error={error['recomendaciones']} />
                </View>
-               <Text>Telefono: {"425 5412"}</Text>
 
-               <PrintToPDFs />
-               {/* <Button
-                  title="Generar Prescripción" style={styles.button}
-                  onPress={() => console.log(productos)}
-               />
-
-               <Button
-                  title="Login"
-                  onPress={() => navigation.navigate('Login')}
-               /> */}
+               <TouchableOpacity
+                  style={styles.buttonOpenModal}
+                  onPress={handleSubmit}
+               >
+                  <Text style={styles.textStyle}>Generar Prescripción</Text>
+               </TouchableOpacity>
 
             </View>
          </ScrollView>
@@ -130,8 +182,7 @@ const styles = StyleSheet.create({
    Prescripciones: {
       width: windowWidth,
       paddingHorizontal: 10,
-      paddingBottom: 30,
-      backgroundColor: '#D6D6D6'
+      paddingBottom: 30
    },
    tituloPagina: {
       marginBottom: 10,
@@ -145,8 +196,10 @@ const styles = StyleSheet.create({
       marginBottom: 10,
       color: '#595655'
    },
+   fecha: {
+      paddingHorizontal: 20
+   },
    buttonOpenModal: {
-      // width: '50%',
       padding: 10,
       backgroundColor: "#d2010d",
       borderRadius: 10
@@ -154,8 +207,14 @@ const styles = StyleSheet.create({
    seccion: {
       marginVertical: 2.5,
       padding: 10,
-      backgroundColor: '#F3F3F3',
-      borderRadius: 10
+      borderWidth: 1.5,
+      borderColor: '#D6D6D6',
+      borderRadius: 10,
+      backgroundColor: "#FFFFFF",
+   },
+   sessionError: {
+      borderWidth: 1.5,
+      borderColor: '#d2010d'
    },
    containerSuperior: {
       flex: 1,
@@ -211,6 +270,10 @@ const styles = StyleSheet.create({
    },
    productosSeleccionados: {
       width: '100%'
+   },
+   textError: {
+      marginLeft: 15,
+      color: '#d2010d'
    }
 });
 

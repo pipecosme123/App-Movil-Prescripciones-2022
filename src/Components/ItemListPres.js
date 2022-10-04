@@ -21,7 +21,9 @@ const styles = StyleSheet.create({
       margin: 5,
       flexDirection: 'row',
       alignItems: 'center',
-      backgroundColor: '#fff'
+      backgroundColor: '#fff',
+      borderBottomWidth: 1,
+      borderBottomColor: '#D6D6D6'
    },
    informacion: {
       width: '70%',
