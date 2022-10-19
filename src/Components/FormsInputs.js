@@ -58,6 +58,7 @@ const styles = StyleSheet.create({
    input: {
       alignItems: 'flex-start',
       justifyContent: 'flex-start',
+      textAlignVertical: 'top',
       borderBottomWidth: 1,
       borderBottomColor: '#595655',
       padding: 5

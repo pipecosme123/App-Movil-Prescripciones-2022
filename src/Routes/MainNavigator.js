@@ -7,29 +7,33 @@ import Constants from 'expo-constants';
 // PÁGINAS \\
 import Login from '../Pages/Login';
 import Prescripciones from '../Pages/Prescripciones';
+import Loading from '../Components/Loading';
+import ResultadoApi from '../Components/ResultadoApi';
 
 const Stack = createNativeStackNavigator();
 
 const MainNavigator = () => {
-   return (
-      <NavigationContainer>
+  return (
+    <NavigationContainer>
       <View style={styles.container}>
-        <Stack.Navigator>
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen name="Login" component={Login} />
+          <Stack.Screen name="Loading" component={Loading} />
+          <Stack.Screen name="ResultadoApi" component={ResultadoApi} />
           <Stack.Screen name="Prescripciones" component={Prescripciones} />
         </Stack.Navigator>
       </View>
     </NavigationContainer>
-   );
+  );
 };
 
 
 const styles = StyleSheet.create({
-   container: {
-     flex: 1,
-    // //  paddingTop: Constants.statusBarHeight,
+  container: {
+    flex: 1,
+     paddingTop: Constants.statusBarHeight,
     //  backgroundColor: '#D6D6D6'
-   },
- });
+  },
+});
 
 export default MainNavigator;

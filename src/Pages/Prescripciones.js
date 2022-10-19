@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Dimensions, FlatList, Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Productos } from '../Constants/Productos';
 import FormsInputs from '../Components/FormsInputs';
 import TapsProductos from '../Components/TapsProductos';
 import ItemListPres from '../Components/ItemListPres';
 import { useForm } from '../Hooks/useForm';
+import Loading from '../Components/Loading';
 
 const windowWidth = Dimensions.get('window').width;
 
@@ -23,36 +25,38 @@ const initialForm = {
 const validationForm = (form) => {
    let errors = {}
 
-   if (form['cedula'] === '') {
-      errors['cedula'] = "Debes llenar este campo";
-   } else if (form['cedula'].length > 15) {
-      errors["cedula"] = `Límite de caracteres superado. Límite máximo 15`;
-   }
+   // if (form['cedula'] === '') {
+   //    errors['cedula'] = "Debes llenar este campo";
+   // } else if (form['cedula'].length > 15) {
+   //    errors["cedula"] = `Límite de caracteres superado. Límite máximo 15`;
+   // }
 
-   if (form['nombre'] === '') {
-      errors['nombre'] = "Debes llenar este campo";
-   } else if (form['nombre'].length > 45) {
-      errors['nombre'] = `Límite de caracteres superado. Límite máximo 45`;
-   }
+   // if (form['nombre'] === '') {
+   //    errors['nombre'] = "Debes llenar este campo";
+   // } else if (form['nombre'].length > 45) {
+   //    errors['nombre'] = `Límite de caracteres superado. Límite máximo 45`;
+   // }
 
-   if (form['apellido'] === '') {
-      errors['apellido'] = "Debes llenar este campo";
-   } else if (form['apellido'].length > 45) {
-      errors['apellido'] = `Límite de caracteres superado. Límite máximo 45`;
-   }
+   // if (form['apellido'] === '') {
+   //    errors['apellido'] = "Debes llenar este campo";
+   // } else if (form['apellido'].length > 45) {
+   //    errors['apellido'] = `Límite de caracteres superado. Límite máximo 45`;
+   // }
 
-   if (form['productos'].length === 0) {
-      errors['productos'] = "Debes seleccionar como mínimo un producto";
-   }
+   // if (form['productos'].length === 0) {
+   //    errors['productos'] = "Debes seleccionar como mínimo un producto";
+   // }
 
-   if (form['recomendaciones'].length > 45) {
-      errors['recomendaciones'] = `Límite de caracteres superado. Límite máximo 45`;
-   }
+   // if (form['recomendaciones'].length > 300) {
+   //    errors['recomendaciones'] = `Límite de caracteres superado. Límite máximo 300`;
+   // }
 
    return errors;
 }
 
-const Prescripciones = ({ navigation }) => {
+const Prescripciones = () => {
+
+   const navigation = useNavigation();
 
    const {
       form,
@@ -104,8 +108,6 @@ const Prescripciones = ({ navigation }) => {
          <ScrollView horizontal={true}>
             <View style={styles.Prescripciones}>
                <Text style={styles.tituloPagina}>Generar Prescripción</Text>
-               {/* <Text style={styles.nombreDoctor}>{`Dr(a).:`} Daniel Felipe Cosme</Text>
-               <Text style={[styles.seccion, styles.fecha]}>Fecha: {getFecha()}</Text> */}
                <View style={[styles.seccion, showError && error['cedula'] && styles.sessionError]}>
                   <FormsInputs label={'Nro. de cédula'} type={'numeric'} nameImput={'cedula'} placeholder={'C. C.'} items={form.cedula} onChangeItems={handleChange} onBlurItems={handleBlur} onShowError={showError} error={error['cedula']} />
                </View>
@@ -166,11 +168,13 @@ const Prescripciones = ({ navigation }) => {
                </View>
 
                <TouchableOpacity
-                  style={styles.buttonOpenModal}
+                  style={styles.buttonOpenModal_submit}
                   onPress={handleSubmit}
                >
                   <Text style={styles.textStyle}>Generar Prescripción</Text>
                </TouchableOpacity>
+
+               {loading && <Loading />}
 
             </View>
          </ScrollView>

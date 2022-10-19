@@ -2,15 +2,21 @@ import { useState } from "react";
 import axios from "axios";
 import * as MediaLibrary from 'expo-media-library';
 import * as FileSystem from 'expo-file-system';
+import { StorageAccessFramework } from 'expo-file-system';
 import { urlApi } from "../Constants/RoutersLinks";
+import { Share } from "react-native";
+import { shareAsync } from "expo-sharing";
+import { useNavigation } from "@react-navigation/native";
 
 export const useForm = (initialForm, validationForm) => {
+
+   const navigation = useNavigation();
 
    const [form, setForm] = useState(initialForm);
    const [error, setError] = useState({ status: false });
    const [showError, setShowError] = useState(false);
    const [loading, setLoading] = useState(false);
-   const [responseApi, setResponseApi] = useState(null);
+   const [responseApi, setResponseApi] = useState({ status: null });
 
    const handleChange = (e) => {
       const name = e.name;
@@ -33,31 +39,27 @@ export const useForm = (initialForm, validationForm) => {
       setError(validationForm(form));
    }
 
-   const handleSubmit = (e) => {
-      // handleBlur(e);
-      // setShowError(true);
-      // // console.log(form);
-      downloadPrescripcion()
-      // if (Object.keys(error).length === 0) {
+   const handleSubmit = async (e) => {
+      handleBlur(e);
+      setShowError(true);
 
-      //    setLoading(true);
+      if (Object.keys(error).length === 0) {
 
-      //    axios.post(`${urlApi}/pdf`, form)
-      //       .then((response) => {
-      //          setLoading(false);
-      //          // setResponseApi(true);
-      //          // resetForm();
+         setLoading(true);
 
-      //          console.log(response.data)
-      //       })
-      //       .catch(function (error) {
-      //          setLoading(false);
-      //          setResponseApi(false);
-      //          console.log(false)
-      //       })
-      // } else {
-      //    console.log('erorr', Object.keys(error).length, error.status)
-      // }
+         axios.post(`${urlApi}/pdf`, form)
+            .then((response) => {
+               setLoading(false);
+               redirectResponse(response.data);
+            })
+            .catch(function (error) {
+               setLoading(false);
+               setResponseApi(false);
+               console.log(error)
+            })
+      } else {
+         console.log('erorr', Object.keys(error).length, error.status)
+      }
    };
 
    const resetForm = () => {
@@ -67,37 +69,32 @@ export const useForm = (initialForm, validationForm) => {
       setShowErrors(false)
    }
 
-   const downloadPrescripcion = async () => {
+   const downloadFile = (urlFile) => {
 
-      const uri = "http://techslides.com/demos/sample-videos/small.mp4"
-      let fileUri = FileSystem.documentDirectory + "small.mp4";
-      FileSystem.downloadAsync(uri, fileUri)
+      FileSystem.downloadAsync(
+         `${urlApi}/files/${urlFile}`,
+         FileSystem.documentDirectory + urlFile
+      )
          .then(({ uri }) => {
-            saveFile(uri);
+            console.log('Finished downloading to ', uri);
          })
          .catch(error => {
             console.error(error);
-         })
-
+         });
    }
 
-   const saveFile = async (fileUri) => {
-      const perm = await MediaLibrary.requestPermissionsAsync();
-      
-      if (perm.status != 'granted') {
-         return;
-      }
+   const redirectResponse = (data) => {
 
-      try {
-         const asset = await MediaLibrary.createAssetAsync(fileUri);
-         const album = await MediaLibrary.getAlbumAsync('Download');
-         if (album == null) {
-            await MediaLibrary.createAlbumAsync('Download', asset, false);
-         } else {
-            await MediaLibrary.addAssetsToAlbumAsync([asset], album, false);
-         }
-      } catch (e) {
-         handleError(e);
+      if(data !== 'Error'){
+         downloadFile(data);
+         navigation.navigate('ResultadoApi', {
+            status: true,
+            uri_pdf: data
+         })
+      }else{
+         navigation.navigate('ResultadoApi', {
+            status: false
+         })
       }
    }
 

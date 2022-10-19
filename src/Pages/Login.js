@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Alert, Button, StyleSheet, Text, View } from 'react-native';
+import { Alert, Button, StyleSheet, Text, TextInput, View } from 'react-native';
 import FormsInputs from '../Components/FormsInputs';
 import { RoutersLinks } from '../Constants/RoutersLinks';
 
@@ -26,8 +26,13 @@ const Login = ({ navigation }) => {
          <FormsInputs label={'Apellido'} type={'default'} nameImput={'apellido'} placeholder={'Apellido'} items={info.apellido} onChangeItems={onChangeItems} />
 
          <Button
-            title="Press me"
-            onPress={() => Alert.alert(`${info.nombre} ${info.apellido}`)}
+            title="Loading"
+            onPress={() => navigation.navigate('Loading')}
+         />
+
+         <Button
+            title="ResultadoApi"
+            onPress={() => navigation.navigate('ResultadoApi')}
          />
 
          <Button
@@ -40,7 +45,7 @@ const Login = ({ navigation }) => {
 
 const styles = StyleSheet.create({
    Login: {
-      
+
    }
 });
 
