@@ -9,6 +9,7 @@ import Login from '../Pages/Login';
 import Prescripciones from '../Pages/Prescripciones';
 import Loading from '../Components/Loading';
 import ResultadoApi from '../Components/ResultadoApi';
+import CargarImagenes from '../Pages/CargarImagenes';
 
 const Stack = createNativeStackNavigator();
 
@@ -21,6 +22,7 @@ const MainNavigator = () => {
           <Stack.Screen name="Loading" component={Loading} />
           <Stack.Screen name="ResultadoApi" component={ResultadoApi} />
           <Stack.Screen name="Prescripciones" component={Prescripciones} />
+          <Stack.Screen name="CargarImagenes" component={CargarImagenes} />
         </Stack.Navigator>
       </View>
     </NavigationContainer>

@@ -31,8 +31,8 @@ const Login = ({ navigation }) => {
          />
 
          <Button
-            title="ResultadoApi"
-            onPress={() => navigation.navigate('ResultadoApi')}
+            title="CargarImagenes"
+            onPress={() => navigation.navigate('CargarImagenes')}
          />
 
          <Button
