@@ -1,8 +1,12 @@
-import * as React from 'react';
-import MainNavigator from './src/Routes/MainNavigator';
+import './config/base64Polyfill.js';
+import * as React from "react";
+import MainNavigator from "./src/Routes/MainNavigator";
+import { AuthProvider } from "./src/Context/AuthContext";
 
 export default function App() {
   return (
-    <MainNavigator />
+    <AuthProvider>
+      <MainNavigator />
+    </AuthProvider>
   );
 }

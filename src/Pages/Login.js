@@ -1,52 +1,62 @@
-import React, { useState } from 'react';
-import { Alert, Button, StyleSheet, Text, TextInput, View } from 'react-native';
-import FormsInputs from '../Components/FormsInputs';
-import { RoutersLinks } from '../Constants/RoutersLinks';
+import React, { useContext } from "react";
+import { useForm } from "react-hook-form";
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import FormsInputs from "../Components/FormsInputs";
+import stylesGlobal from "../css/stylesGlobal";
+import { AuthContext } from "../Context/AuthContext";
+import Buttons from "../Components/Buttons";
 
-const Login = ({ navigation }) => {
+const Login = () => {
+  const { control, handleSubmit } = useForm();
+  const { login } = useContext(AuthContext);
 
-   const [info, setInfo] = useState({
-      nombre: '',
-      apellido: '',
-      telefono: ''
-   });
+  const onSubmit = (data) => {
+    const { password } = data;
+    login({ password }).catch((err) => {
+      Alert.alert("¡Error!", err, [{ text: "OK" }]);
+    });
+  };
 
-   const onChangeItems = (data) => {
-      setInfo({
-         ...info,
-         [data.name]: data.value
-      })
-   }
+  return (
+    <View style={styles.Login}>
+      <Text style={[styles.text]}>
+        Bienvenido a{" "}
+        <Text style={[stylesGlobal.text_bold]}>
+          prescripciones odontológicas{" "}
+        </Text>
+        <Text style={[stylesGlobal.text_bold, stylesGlobal.color_colgate]}>
+          Colgate
+        </Text>
+        , ingrese su número de cédula.
+      </Text>
 
-   return (
-      <View style={styles.Login}>
-         <Text>Login</Text>
+      <FormsInputs
+        control={control}
+        name={"password"}
+        label={"Cédula de ciudadania"}
+        type={"numeric"}
+        placeholder={"C.C.:"}
+        rules={{ required: "Este campo es obligatorio" }}
+      />
 
-         <FormsInputs label={'Nombre'} type={'default'} nameImput={'nombre'} placeholder={'Nombre'} items={info.nombre} onChangeItems={onChangeItems} />
-         <FormsInputs label={'Apellido'} type={'default'} nameImput={'apellido'} placeholder={'Apellido'} items={info.apellido} onChangeItems={onChangeItems} />
-
-         <Button
-            title="Loading"
-            onPress={() => navigation.navigate('Loading')}
-         />
-
-         <Button
-            title="CargarImagenes"
-            onPress={() => navigation.navigate('CargarImagenes')}
-         />
-
-         <Button
-            title="Prescripción"
-            onPress={() => navigation.navigate('Prescripciones')}
-         />
-      </View>
-   );
+      <Buttons onPress={handleSubmit(onSubmit)}>Iniciar Sesión</Buttons>
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({
-   Login: {
-
-   }
+  Login: {
+    paddingHorizontal: 30,
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  text: {
+    fontSize: 13,
+    textAlign: "center",
+    marginHorizontal: 20,
+    marginBottom: 20,
+  },
 });
 
 export default Login;

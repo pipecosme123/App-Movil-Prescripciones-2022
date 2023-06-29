@@ -1,41 +1,34 @@
-import * as React from 'react';
-import { StyleSheet, View } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import Constants from 'expo-constants';
-
-// PÁGINAS \\
-import Login from '../Pages/Login';
-import Prescripciones from '../Pages/Prescripciones';
-import Loading from '../Components/Loading';
-import ResultadoApi from '../Components/ResultadoApi';
-import CargarImagenes from '../Pages/CargarImagenes';
-
-const Stack = createNativeStackNavigator();
+import React, { useContext } from "react";
+import { NavigationContainer } from "@react-navigation/native";
+import AuthStack from "./AuthStack";
+import AppStack from "./AppStack";
+import { AuthContext } from "../Context/AuthContext";
+import { ActivityIndicator, View } from "react-native";
 
 const MainNavigator = () => {
+  const { isLoading, token } = useContext(AuthContext);
+
+  if (isLoading) {
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignltems: "center" }}>
+        <ActivityIndicator size={"large"} />
+      </View>
+    );
+  }
+
   return (
     <NavigationContainer>
-      <View style={styles.container}>
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="Login" component={Login} />
-          <Stack.Screen name="Loading" component={Loading} />
-          <Stack.Screen name="ResultadoApi" component={ResultadoApi} />
-          <Stack.Screen name="Prescripciones" component={Prescripciones} />
-          <Stack.Screen name="CargarImagenes" component={CargarImagenes} />
-        </Stack.Navigator>
-      </View>
+      {token !== null ? <AppStack /> : <AuthStack />}
     </NavigationContainer>
   );
 };
 
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-     paddingTop: Constants.statusBarHeight,
-    //  backgroundColor: '#D6D6D6'
-  },
-});
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//      paddingTop: Constants.statusBarHeight,
+//     //  backgroundColor: '#D6D6D6'
+//   },
+// });
 
 export default MainNavigator;

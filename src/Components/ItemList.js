@@ -1,11 +1,13 @@
 import React from 'react';
 import { Image, StyleSheet, Text, View } from 'react-native';
+import { baseURL } from '../Constants/constants';
+import stylesGlobal from '../css/stylesGlobal';
 
-const ItemList = ({ img, title }) => {
+const ItemList = ({ imagen, nombres }) => {
    return (
       <View style={styles.ItemList}>
-         <Image style={styles.imagenItemList} source={img} />
-         <Text style={styles.text}>{title}</Text>
+         <Image style={styles.imagenItemList} source={{uri: `${baseURL}/img?key=${imagen}`}} />
+         <Text style={styles.text}>{nombres}</Text>
       </View>
    );
 };
@@ -22,8 +24,10 @@ const styles = StyleSheet.create({
       height: 130
    },
    text: {
-      width: '70%',
-      textAlign: 'center'
+      width: '100%',
+      textAlign: 'center',
+      ...stylesGlobal.color_oscuro,
+      fontSize: 13
    },
    isSelected: {
       backgroundColor: "blue"

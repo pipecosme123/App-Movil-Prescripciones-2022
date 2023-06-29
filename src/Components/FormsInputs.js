@@ -1,83 +1,121 @@
-import React, { useEffect, useState } from 'react';
-import { Dimensions, StyleSheet, Text, TextInput, View } from 'react-native';
+import React, { useState } from "react";
+import { Controller } from "react-hook-form";
+import { StyleSheet, Text, TextInput, View } from "react-native";
+import stylesGlobal from "../css/stylesGlobal";
 
-const windowWidth = Dimensions.get('window').width;
+const FormsInputs = ({
+  control,
+  label,
+  type,
+  name,
+  placeholder,
+  multiline,
+  rules = {},
+}) => {
+  const minHeight = 50;
+  const [isFocusI, setIsFocusI] = useState(false);
 
-const FormsInputs = ({ label, type, nameImput, placeholder, items, onChangeItems, onBlurItems, multiline, onShowError, error }) => {
+  const [height, setHeight] = useState(minHeight);
 
-   const [isFocusI, setIsFocusI] = useState(false);
-   const [fontsLoaded, setFontsLoaded] = useState(false);
+  const handleContentSizeChange = (event) => {
+    const { height } = event.nativeEvent.contentSize;
+    let valor;
 
-   const handleChange = (value, name) => {
-      onChangeItems({
-         name: name,
-         value: value
-      })
-   }
+    if (height > minHeight) {
+      valor = height;
+    } else {
+      valor = minHeight;
+    }
 
-   const handleBlur = (e) => {
-      onBlurItems(e);
-      setIsFocusI(false)
-   }
+    setHeight(valor);
+  };
 
-   return (
-      <View style={[styles.FormsInputs, onShowError && error && styles.FormsInputseError]}>
-         <Text style={[styles.label, isFocusI && styles.isFocusedLabel, onShowError && error && styles.labelError]} onFocus={() => setIsFocusI(true)} onBlur={() => setIsFocusI(false)}>{label}</Text>
-         <TextInput
-            multiline={multiline ? true : false}
-            style={[styles.input, isFocusI && styles.isFocused, { height: multiline ? 200 : 40 }, onShowError && error && styles.inputError]}
-            onFocus={() => setIsFocusI(true)}
-            onBlur={handleBlur}
-            onChangeText={text => handleChange(text, nameImput)}
-            value={items}
-            name={nameImput}
-            placeholder={placeholder}
+  return (
+    <Controller
+      control={control}
+      name={name}
+      rules={rules}
+      render={({ field: { onChange, value }, fieldState: { error } }) => (
+        <View style={[styles.FormsInputs, styles.FormsInputseError]}>
+          <Text
+            style={[
+              stylesGlobal.labelInput,
+              isFocusI ? styles.isFocusedLabel : stylesGlobal.color_oscuro,
+              error && styles.labelError,
+            ]}
+          >
+            {label}
+          </Text>
+
+          <TextInput
             keyboardType={type}
-            numberOfLines={5}
-         />
-         {onShowError && error && <Text style={styles.textError}>{error}</Text>}
-      </View>
-   );
+            style={[
+              styles.input,
+              isFocusI && styles.isFocused,
+              { height: multiline ? height : 50 },
+              error && styles.inputError,
+            ]}
+            value={value}
+            placeholder={placeholder}
+            multiline={multiline ? true : false}
+            onFocus={() => setIsFocusI(true)}
+            onBlur={() => setIsFocusI(false)}
+            onChangeText={onChange}
+            onContentSizeChange={multiline && handleContentSizeChange}
+          />
+          {error && (
+            <Text style={styles.textError}>{error.message || "Error"}</Text>
+          )}
+        </View>
+      )}
+    ></Controller>
+  );
 };
 
 const styles = StyleSheet.create({
-   FormsInputs: {
-      width: '100%',
-      marginBottom: 10,
-      paddingHorizontal: 10
-   },
-   FormsInputseError: {
-      marginBottom: 0
-   },
-   label: {
-
-   },
-   labelError:{
-      color: '#d2010d'
-   },
-   input: {
-      alignItems: 'flex-start',
-      justifyContent: 'flex-start',
-      textAlignVertical: 'top',
-      borderBottomWidth: 1,
-      borderBottomColor: '#595655',
-      padding: 5
-   },
-   inputError: {
-      borderBottomWidth: 1,
-      borderBottomColor: '#d2010d'
-   },
-   isFocused: {
-      borderBottomColor: '#009CA6',
-      backgroundColor: '#f0f0f0'
-   },
-   isFocusedLabel: {
-      color: '#009CA6'
-   },
-   textError: {
-      marginLeft: 5,
-      color: '#d2010d'
-   }
+  FormsInputs: {
+    width: "100%",
+    marginBottom: 500,
+  },
+  FormsInputseError: {
+    marginBottom: 0,
+  },
+  labelError: {
+    color: "#d2010d",
+  },
+  input: {
+    fontSize: 20,
+    alignItems: "center",
+    justifyContent: "center",
+    textAlignVertical: "center",
+    borderWidth: 1,
+    borderColor: "#e5e5e6",
+    borderRadius: 20,
+    padding: 10,
+    paddingLeft: 10,
+    color: "#595655",
+  },
+  heightInput: {
+    height: 50,
+  },
+  inputError: {
+    borderWidth: 1,
+    borderBottomWidth: 2,
+    borderColor: "#d2010d",
+  },
+  isFocused: {
+    borderBottomWidth: 2,
+    borderWidth: 1,
+    borderColor: "#009CA6",
+    backgroundColor: "#f5f5f5",
+  },
+  isFocusedLabel: {
+    color: "#009CA6",
+  },
+  textError: {
+    marginLeft: 5,
+    color: "#d2010d",
+  },
 });
 
 export default FormsInputs;
