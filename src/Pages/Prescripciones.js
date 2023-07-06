@@ -114,9 +114,9 @@ const Prescripciones = ({ navigation }) => {
           <View style={[styles.seccion]}>
             <FormsInputs
               control={control}
-              // rules={{
-              //   required: "Este campo es requerido",
-              // }}
+              rules={{
+                required: "Este campo es requerido",
+              }}
               name={"paciente.cedula"}
               label={"Cédula de ciudadanía"}
               type={"numeric"}
@@ -126,9 +126,9 @@ const Prescripciones = ({ navigation }) => {
           <View style={[styles.seccion]}>
             <FormsInputs
               control={control}
-              // rules={{
-              //   required: "Este campo es requerido",
-              // }}
+              rules={{
+                required: "Este campo es requerido",
+              }}
               name={"paciente.nombre"}
               label={"Nombres"}
               type={"default"}
@@ -138,9 +138,9 @@ const Prescripciones = ({ navigation }) => {
           <View style={[styles.seccion]}>
             <FormsInputs
               control={control}
-              // rules={{
-              //   required: "Este campo es requerido",
-              // }}
+              rules={{
+                required: "Este campo es requerido",
+              }}
               name={"paciente.apellido"}
               label={"Apellidos"}
               type={"default"}

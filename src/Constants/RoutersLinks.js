@@ -4,8 +4,10 @@ export const ROUTE = {
   CONTENT_PRESCRIPCIONES: "ContentPrescripciones",
   DOWNLOAD_PDF: "DownloadPdf",
   PRESCRIPCIONES: "Prescripciones",
-  CARGARIMAGENES: "CargarImagenes",
+  VADEMECUM: "Vademecum",
   PAPER_PRESCRIPCION: "PaperPrescripcion",
+  PERFIL: "Perfil",
+  EDITAR_PERFIL: 'EditarPerfil',
 };
 
 // export const urlApi = 'https://pruebapautafacebook.col1.co/api'

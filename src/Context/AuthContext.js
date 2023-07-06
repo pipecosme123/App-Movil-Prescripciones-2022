@@ -55,10 +55,8 @@ export const AuthProvider = ({ children }) => {
       let data = await AsyncStorage.getItem(AS_DATA);
       data = JSON.parse(data);
 
-      // if (data) {
       setToken(token);
       setData(data);
-      // }
 
       setIsLoading(false);
     } catch (error) {
@@ -71,7 +69,7 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ login, logout, isLoading, token, data }}>
+    <AuthContext.Provider value={{ login, logout, isLoggedIn, isLoading, token, data }}>
       {children}
     </AuthContext.Provider>
   );

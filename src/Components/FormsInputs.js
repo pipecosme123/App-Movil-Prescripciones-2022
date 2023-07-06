@@ -6,7 +6,7 @@ import stylesGlobal from "../css/stylesGlobal";
 const FormsInputs = ({
   control,
   label,
-  type,
+  type = "default",
   name,
   placeholder,
   multiline,

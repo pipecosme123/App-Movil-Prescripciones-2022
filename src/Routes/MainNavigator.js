@@ -23,12 +23,4 @@ const MainNavigator = () => {
   );
 };
 
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//      paddingTop: Constants.statusBarHeight,
-//     //  backgroundColor: '#D6D6D6'
-//   },
-// });
-
 export default MainNavigator;

@@ -50,7 +50,7 @@ const Home = () => {
     <ScrollView style={[styles.Home]}>
       <View style={stylesGlobal.container}>
         {loading && <Loading />}
-        <View style={{ marginHorizontal: 20 }}>
+        <View>
           <Title color={AZUL}>Mis Prescripciones</Title>
         </View>
 

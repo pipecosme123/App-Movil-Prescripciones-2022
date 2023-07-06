@@ -1,11 +1,8 @@
 import { useRoute } from "@react-navigation/native";
 import React, { useContext, useEffect, useState } from "react";
 import {
-  FlatList,
-  SafeAreaView,
   ScrollView,
   StyleSheet,
-  Text,
   View,
 } from "react-native";
 import { Conexion } from "../config";
@@ -58,42 +55,46 @@ const PaperPrescripcion = ({ navigation }) => {
 
   return (
     <ScrollView style={{}}>
-      <View style={[stylesGlobal.container]}>
-        {loading && <Loading />}
-        {Object.keys(data).length !== 0 && (
-          <View>
+      {/* {!loading ? */}
+        <View style={[stylesGlobal.container]}>
+          {loading && <Loading />}
+          {Object.keys(data).length !== 0 && (
             <View>
-              <Title color={AZUL}>Paciente</Title>
-              <InputText title={"Cédula"} data={prescripcion.cedulas} />
-              <InputText
-                title={"Nombres"}
-                data={capitalizarPrimerasLetras(prescripcion.nombres)}
-              />
-              <InputText
-                title={"Apellidos"}
-                data={capitalizarPrimerasLetras(prescripcion.apellidos)}
-              />
-              <InputText
-                title={"Recomendaciones"}
-                data={capitalizarPrimerasLetras(prescripcion.recomendaciones)}
-              />
-            </View>
-            <View>
-              <Title color={AZUL}>Productos</Title>
-              {productos.map(({ nombres, imagen }, index) => (
-                <ItemProductos
-                  key={index}
-                  name={nombres}
-                  url={`${baseURL}/img?key=${imagen}`}
+              <View>
+                <Title color={AZUL}>Paciente</Title>
+                <InputText title={"Cédula"} data={prescripcion.cedulas} />
+                <InputText
+                  title={"Nombres"}
+                  data={capitalizarPrimerasLetras(prescripcion.nombres)}
                 />
-              ))}
+                <InputText
+                  title={"Apellidos"}
+                  data={capitalizarPrimerasLetras(prescripcion.apellidos)}
+                />
+                <InputText
+                  title={"Recomendaciones"}
+                  data={capitalizarPrimerasLetras(prescripcion.recomendaciones)}
+                />
+              </View>
+              <View>
+                <Title color={AZUL}>Productos</Title>
+                {productos.map(({ nombres, imagen }, index) => (
+                  <ItemProductos
+                    key={index}
+                    name={nombres}
+                    url={`${baseURL}/img?key=${imagen}`}
+                  />
+                ))}
+              </View>
+              <View>
+                <Buttons color={AZUL}>Descargar PDF</Buttons>
+              </View>
             </View>
-            <View>
-              <Buttons color={AZUL}>Generar Prescripción</Buttons>
-            </View>
-          </View>
-        )}
-      </View>
+          )}
+        </View>
+        {/* : */}
+        {/* <Loading simple={false} text={"Generando prescripción..."} /> */}
+      {/* } */}
     </ScrollView>
   );
 };
