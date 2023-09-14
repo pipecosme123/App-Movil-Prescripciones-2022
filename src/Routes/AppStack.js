@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
@@ -8,7 +8,6 @@ import { AntDesign } from "@expo/vector-icons";
 // PÁGINAS \\
 import Prescripciones from "../Pages/Prescripciones";
 import DownloadPdf from "../Components/DownloadPdf";
-import CargarImagenes from "../Pages/CargarImagenes";
 import Home from "../Pages/Home";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { AuthContext } from "../Context/AuthContext";
@@ -17,11 +16,10 @@ import stylesGlobal from "../css/stylesGlobal";
 import { ROUTE } from "../Constants/RoutersLinks";
 import PaperPrescripcion from "../Pages/PaperPrescripcion";
 import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
-import { useNavigation } from "react-router-native";
 import Perfil from "../Pages/Perfil";
 import EditarPerfil from "../Pages/EditarPerfil";
 import Vademecum from "../Pages/Vademecum";
-import { NARANJA } from "../Constants/constants";
+import { BLANCO, NARANJA } from "../Constants/constants";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -46,6 +44,7 @@ const TabHome = ({ navigation }) => {
           tabBarStyle: {
             display: getTabBarVisibility(route),
             height: 80,
+            flexDirection: 'column',
           },
           tabBarLabel: "Inicio",
           tabBarIcon: ({ color, size }) => (
@@ -61,10 +60,13 @@ const TabHome = ({ navigation }) => {
         options={{
           tabBarButton: ({ children, onPress }) => (
             <TouchableOpacity
-              onPress={() =>
-                navigation.navigate("ROUTE.CONTENT_PRESCRIPCIONES")
-              }
-              style={{ height: 100, alignItems: "center" }}
+              onPress={() => {
+                navigation.navigate(ROUTE.CONTENT_PRESCRIPCIONES);
+              }}
+              style={{
+                height: 80,
+                alignItems: "center"
+              }}
             >
               <View>{children}</View>
             </TouchableOpacity>
@@ -76,8 +78,7 @@ const TabHome = ({ navigation }) => {
           ),
           tabBarLabel: "Prescripción",
           tabBarLabelStyle: {
-            fontSize: 13,
-            fontWeight: "800",
+            color: BLANCO
           },
           tabBarStyle: {
             display: "none",
@@ -98,6 +99,7 @@ const TabHome = ({ navigation }) => {
           tabBarStyle: {
             display: getTabBarVisibility(route),
             height: 80,
+            flexDirection: 'column',
           },
           tabBarLabel: "Vademécum",
           tabBarIcon: ({ color, size }) => (
@@ -275,7 +277,7 @@ const AppStack = () => {
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name={"ROUTE.CONTENT_HOME"} component={TabHome} />
       <Stack.Screen
-        name={"ROUTE.CONTENT_PRESCRIPCIONES"}
+        name={ROUTE.CONTENT_PRESCRIPCIONES}
         component={StackPrescripciones}
       />
     </Stack.Navigator>

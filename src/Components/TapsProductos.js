@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import {
   Dimensions,
   FlatList,
+  Platform,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -14,7 +15,10 @@ import { AZUL, TODOS } from "../Constants/constants";
 import Buttons from "./Buttons";
 
 const TapsProductos = ({ handleProductos }) => {
-  const numColumns = 2;
+  const numColumns = Platform.select({
+    web: 4,
+    default: 2
+  });
 
   const [categoria, setCategoria] = useState(TODOS);
   const [listTab, setListTab] = useState([]);
@@ -190,7 +194,10 @@ const styles = StyleSheet.create({
     // marginBottom: 10
   },
   btnTabs: {
-    width: Dimensions.get("window").width / 2,
+    width: Platform.select({
+      web: Dimensions.get("window").width / 8,
+      default: Dimensions.get("window").width / 2
+    }),
     padding: 6,
     paddingTop: 10,
     paddingBottom: 10,
@@ -213,7 +220,14 @@ const styles = StyleSheet.create({
     color: "#d2010d",
   },
   listaProductos: {
-    height: "85%",
+    maxHeight: Platform.select({
+      web: "45%",
+      default: "85%",
+    }),
+    minHeight: Platform.select({
+      web: 300,
+      default: "85%",
+    }),
   },
   ItemList: {
     flex: 1,

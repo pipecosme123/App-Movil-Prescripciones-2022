@@ -3,7 +3,7 @@ import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "rea
 import * as ImagePicker from "expo-image-picker";
 import stylesGlobal from "../css/stylesGlobal";
 
-import { Entypo } from "@expo/vector-icons";
+import { Entypo, AntDesign } from "@expo/vector-icons";
 import Buttons from "../Components/Buttons";
 import { AuthContext } from "../Context/AuthContext";
 import { urlImages } from "../functions/urlImages";
@@ -71,31 +71,29 @@ const Perfil = ({ navigation }) => {
               />
             </View>
             <View>
-              <View>
-                <Text>Firma</Text>
+              <View style={{ marginTop: 10 }}>
+                <Text style={{ fontSize: 18, fontWeight: '700', ...stylesGlobal.color_azul }}>Firma</Text>
                 {firma ? (
                   <Image source={{ uri: urlImages(firma) }} style={styles.imagen} />
                 ) : (
-                  <View>
-                    <Entypo name="camera" size={40} color="#727272" />
+                  <View style={styles.contentImage}>
+                    <AntDesign name="closecircle" size={40} color="#727272" />
                     <Text>Sin imagen de la firma del odontólogo</Text>
                   </View>
                 )}
               </View>
-              <View>
-                <Text>Sello</Text>
+              <View style={{ marginVertical: 10 }}>
+                <Text style={{ fontSize: 18, fontWeight: '700', ...stylesGlobal.color_azul }}>Sello</Text>
                 {sello ? (
                   <Image source={{ uri: urlImages(sello) }} style={styles.imagen} />
                 ) : (
-                  <View>
-                    <Entypo name="camera" size={40} color="#727272" />
+                  <View style={styles.contentImage}>
+                    <AntDesign name="closecircle" size={40} color="#727272" />
                     <Text>Sin imagen del sello del odontólogo</Text>
                   </View>
                 )}
               </View>
             </View>
-          </View>
-          <View>
             <Buttons color={AZUL} onPress={() => navigation.navigate(ROUTE.EDITAR_PERFIL, { data })}>Editar Información</Buttons>
             <Buttons outline={true} onPress={() => logout()}>Cerrar sesión</Buttons>
           </View>
@@ -126,6 +124,18 @@ const styles = StyleSheet.create({
     height: 200,
     borderRadius: 10,
   },
+  contentImage: {
+    width: "100%",
+    height: 100,
+    marginTop: 5,
+    backgroundColor: "#bfbfbf",
+    borderRadius: 10,
+    borderWidth: 2,
+    borderColor: "#727272",
+    borderStyle: "dashed",
+    justifyContent: 'center',
+    alignItems: 'center'
+  }
 });
 
 export default Perfil;

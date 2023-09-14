@@ -6,7 +6,7 @@ import {
   View,
 } from "react-native";
 import { Conexion } from "../config";
-import { AZUL, GET, baseURL } from "../Constants/constants";
+import { AZUL, GET, POST, baseURL } from "../Constants/constants";
 import { AuthContext } from "../Context/AuthContext";
 import { capitalizarPrimerasLetras } from "../functions/capitalizarPrimerasLetras";
 import InputText from "../Components/InputText";
@@ -15,6 +15,7 @@ import Buttons from "../Components/Buttons";
 import ItemProductos from "../Components/ItemProductos";
 import stylesGlobal from "../css/stylesGlobal";
 import Loading from "../Components/Loading";
+import { ROUTE } from "../Constants/RoutersLinks";
 
 const PaperPrescripcion = ({ navigation }) => {
   const { token } = useContext(AuthContext);
@@ -25,6 +26,29 @@ const PaperPrescripcion = ({ navigation }) => {
 
   const route = useRoute();
   const { id } = route.params;
+
+  const onSubmit = (data) => {
+    isLoading(true);
+    Conexion({
+      method: GET,
+      url: `/download/${id}`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      }
+    })
+      .then(({ data }) => {
+        navigation.navigate(ROUTE.CONTENT_PRESCRIPCIONES, {
+          screen: ROUTE.DOWNLOAD_PDF,
+          params: { data }
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        isLoading(false);
+      });
+  };
 
   useEffect(() => {
     isLoading(true);
@@ -56,8 +80,8 @@ const PaperPrescripcion = ({ navigation }) => {
   return (
     <ScrollView style={{}}>
       {/* {!loading ? */}
+      {!loading ?
         <View style={[stylesGlobal.container]}>
-          {loading && <Loading />}
           {Object.keys(data).length !== 0 && (
             <View>
               <View>
@@ -87,14 +111,14 @@ const PaperPrescripcion = ({ navigation }) => {
                 ))}
               </View>
               <View>
-                <Buttons color={AZUL}>Descargar PDF</Buttons>
+                <Buttons color={AZUL} onPress={onSubmit}>Descargar PDF</Buttons>
               </View>
             </View>
           )}
         </View>
-        {/* : */}
-        {/* <Loading simple={false} text={"Generando prescripción..."} /> */}
-      {/* } */}
+        :
+        <Loading />
+      }
     </ScrollView>
   );
 };

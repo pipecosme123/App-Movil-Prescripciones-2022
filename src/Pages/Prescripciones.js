@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import {
   Modal,
+  Platform,
   ScrollView,
   StyleSheet,
   Text,
@@ -16,11 +17,12 @@ import ItemListPres from "../Components/ItemListPres";
 import stylesGlobal from "../css/stylesGlobal";
 import { AuthContext } from "../Context/AuthContext";
 import { Conexion } from "../config";
-import { GET, POST, ROJO } from "../Constants/constants";
+import { GET, POST, ROJO, WARNING } from "../Constants/constants";
 import Title from "../Components/Title";
 import Loading from "../Components/Loading";
 import { ROUTE } from "../Constants/RoutersLinks";
 import Buttons from "../Components/Buttons";
+import Alerts from "../Components/Alerts";
 
 const defaultValues = {
   paciente: {
@@ -39,11 +41,21 @@ const Prescripciones = ({ navigation }) => {
     defaultValues,
   });
 
-  const { token } = useContext(AuthContext);
+  const { token, data: { fotos } } = useContext(AuthContext);
 
   const [modalVisible, setModalVisible] = useState(false);
   const [productosSeleccionados, setProductosSeleccionados] = useState([]);
   const [loading, setLoading] = useState(false);
+
+  const [alert, setAlert] = useState({
+    show: false,
+    type: '',
+    message: '',
+  });
+
+  const onClose = () => {
+    navigation.navigate(ROUTE.PERFIL);
+  }
 
   const onSubmit = (data) => {
     isLoading(true);
@@ -103,11 +115,23 @@ const Prescripciones = ({ navigation }) => {
   };
 
   useEffect(() => {
-    cargarProductos();
+
+    if (fotos !== false) {
+      cargarProductos();
+    } else {
+      setAlert({
+        show: true,
+        type: WARNING,
+        message: "Antes de comenzar a prescribir, asegúrate de subir una foto clara de tu firma y sello como odontólogo.",
+      })
+    }
+
   }, []);
 
   return (
     <ScrollView style={styles.Prescripciones}>
+      <Alerts show={alert.show} onClose={onClose} type={alert.type} message={alert.message} />
+
       {!loading ? (
         <View style={[stylesGlobal.container, { paddingBottom: 20 }]}>
           <Title color={ROJO}>Paciente</Title>
@@ -216,7 +240,10 @@ const Prescripciones = ({ navigation }) => {
           </TouchableOpacity>
         </View>
       ) : (
-        <Loading simple={false} text={"Generando prescripción..."} />
+        <Loading simple={Platform.select({
+          web: true,
+          default: false,
+        })} text={"Generando prescripción..."} />
       )}
     </ScrollView>
   );

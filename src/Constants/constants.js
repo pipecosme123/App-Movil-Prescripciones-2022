@@ -11,10 +11,13 @@ export const BLANCO = '#FFFFFF';
 export const NARANJA = "#FF6905";
 export const GRIS_CLARO = "#F3F3F3";
 
+export const SUCCESS = 'success';
+export const WARNING = 'warning';
+export const ERROR = 'error';
 
 export const TODOS = "Todos";
 
-export const baseURL = "http://192.168.1.29:3100";
+export const baseURL = "https://app-prescripciones-colgate.col1.co/api"; 
 
 // export const AS_TOKEN = 'token';
 // export const AS_TOKEN = 'token';

@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Platform, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import * as FileSystem from "expo-file-system";
+import * as Print from 'expo-print';
 import LottieView from "lottie-react-native";
 import { Animations } from "../Constants/Animations";
 import { shareAsync } from "expo-sharing";
 import Buttons from "./Buttons";
+import { AntDesign } from '@expo/vector-icons';
 import { VERDE } from "../Constants/constants";
 import { ROUTE } from "../Constants/RoutersLinks";
 
@@ -16,7 +18,8 @@ const DownloadPdf = ({ navigation }) => {
   const [locationPdf, setLocationPdf] = useState("");
 
   const saveFileToDevice = async (pdfBlob) => {
-    const fileUri = FileSystem.documentDirectory + "archivo.pdf";
+    const nameFile = new Date().getTime();
+    const fileUri = FileSystem.documentDirectory + `${nameFile}.pdf`;
 
     try {
       await FileSystem.writeAsStringAsync(fileUri, pdfBlob, {
@@ -29,24 +32,48 @@ const DownloadPdf = ({ navigation }) => {
   };
 
   const sharePrescripcion = async () => {
-    await shareAsync(locationPdf, {
-      UTI: ".pdf",
-      mimeType: "application/pdf",
-    });
+    Platform.select({
+      web: (
+        printToFile()
+      ),
+      default: (
+        await shareAsync(locationPdf, {
+          UTI: ".pdf",
+          mimeType: "application/pdf",
+        })
+      ),
+    })
+
+  };
+
+  const printToFile = async () => {
+    // On iOS/android prints the given html. On web prints the HTML from the current page.
+    const { uri } = await Print.printAsync({ data, base64: true });
+    console.log('File has been saved to:', uri);
+    await shareAsync(uri, { UTI: '.pdf', mimeType: 'application/pdf' });
   };
 
   useEffect(() => {
     saveFileToDevice(data);
-  }, []);
+  }, [data]);
 
   return (
     <View style={[StyleSheet.absoluteFillObject, styles.DownloadPdf]}>
-      <LottieView
-        style={styles.animation_check}
-        source={Animations.check}
-        autoPlay
-        loop={false}
-      />
+
+      {
+        Platform.select({
+          web: (<AntDesign name="checkcircle" size={50} color={VERDE} />),
+          default: (
+            <LottieView
+              style={styles.animation_check}
+              source={Animations.check}
+              autoPlay
+              loop={false}
+            />
+          ),
+        })
+      }
+
 
       <Text style={styles.textDownloadPdf}>
         Prescirpción generanda correctamente

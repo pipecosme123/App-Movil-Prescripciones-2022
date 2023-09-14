@@ -8,7 +8,7 @@ import Buttons from "../Components/Buttons";
 import { AuthContext } from "../Context/AuthContext";
 import { urlImages } from "../functions/urlImages";
 import Title from "../Components/Title";
-import { AS_DATA, AS_TOKEN, AZUL, GET, PUT } from "../Constants/constants";
+import { AS_DATA, AS_TOKEN, AZUL, ERROR, GET, PUT, SUCCESS } from "../Constants/constants";
 import InputText from "../Components/InputText";
 import { capitalizarPrimerasLetras } from "../functions/capitalizarPrimerasLetras";
 import { ROUTE } from "../Constants/RoutersLinks";
@@ -72,7 +72,7 @@ const EditarPerfil = ({ route, navigation }) => {
       ...alert,
       show: false
     })
-    if (alert.type === true) {
+    if (alert.type === SUCCESS) {
       isLoggedIn();
     }
   }
@@ -104,7 +104,7 @@ const EditarPerfil = ({ route, navigation }) => {
 
         setAlert({
           show: true,
-          type: true,
+          type: SUCCESS,
           message: 'Los datos se han actualizado correctamente',
         })
 
@@ -112,7 +112,7 @@ const EditarPerfil = ({ route, navigation }) => {
       .catch(({ response: { data } }) => {
         setAlert({
           show: true,
-          type: true,
+          type: ERROR,
           message: data,
         });
         console.log(data);
@@ -184,8 +184,8 @@ const EditarPerfil = ({ route, navigation }) => {
                 />
               </View>
               <View>
-                <View>
-                  <Text>Firma</Text>
+                <View style={{marginTop: 10}}>
+                  <Text style={{ fontSize: 18, fontWeight: '700', ...stylesGlobal.color_oscuro }}>Firma</Text>
                   <TouchableOpacity
                     style={styles.seccionImagen}
                     onPress={() => pickImage("firma")}
@@ -200,8 +200,8 @@ const EditarPerfil = ({ route, navigation }) => {
                     )}
                   </TouchableOpacity>
                 </View>
-                <View>
-                  <Text>Sello</Text>
+                <View style={{marginTop: 10}}>
+                  <Text style={{ fontSize: 18, fontWeight: '700', ...stylesGlobal.color_oscuro }}>Sello</Text>
                   <TouchableOpacity
                     style={styles.seccionImagen}
                     onPress={() => pickImage("sello")}
@@ -219,8 +219,8 @@ const EditarPerfil = ({ route, navigation }) => {
               </View>
             </View>
             <View>
-              <Buttons color={AZUL} onPress={handleSubmit(onSubmit)}>Editar Información</Buttons>
-              {/* <Buttons outline={true} onPress={() => logout()}>Cerrar sesión</Buttons> */}
+              <Buttons color={AZUL} onPress={handleSubmit(onSubmit)}>Guardar Cambios</Buttons>
+              <Buttons outline={true} onPress={() => navigation.navigate(ROUTE.PERFIL)}>Cancelar</Buttons>
             </View>
           </View>
         )

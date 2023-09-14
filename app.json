@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "PrescripcionesColgate",
+    "name": "Prescripciones Colgate",
     "slug": "PrescripcionesColgate",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -9,7 +9,7 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#009CA6"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -23,7 +23,7 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#FFFFFF"
+        "backgroundColor": "#D2010D"
       },
       "permissions": [
         "READ_EXTERNAL_STORAGE",

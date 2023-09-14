@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import {
   Dimensions,
   FlatList,
+  RefreshControl,
   SafeAreaView,
   ScrollView,
   StyleSheet,
@@ -24,10 +25,11 @@ const Home = () => {
   const { token } = useContext(AuthContext);
   const [Prescripciones, setPrescripciones] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [refresh, setRefresh] = useState(false);
   const navigation = useNavigation();
 
-  useEffect(() => {
-    setLoading(true);
+  const getData = () => {
+    setRefresh(true);
     Conexion({
       method: GET,
       url: "/lista",
@@ -42,14 +44,25 @@ const Home = () => {
         console.log(err.response.data);
       })
       .finally(() => {
-        setLoading(false);
+        setRefresh(false);
       });
+  }
+
+  useEffect(() => {
+    getData();
   }, []);
 
   return (
-    <ScrollView style={[styles.Home]}>
+    <ScrollView
+      refreshControl={
+        <RefreshControl
+          refreshing={refresh}
+          onRefresh={() => getData()}
+        />
+      }
+      style={[styles.Home]}>
       <View style={stylesGlobal.container}>
-        {loading && <Loading />}
+        {/* {loading && <Loading />} */}
         <View>
           <Title color={AZUL}>Mis Prescripciones</Title>
         </View>
