@@ -27,29 +27,31 @@ const Tab = createBottomTabNavigator();
 const TabHome = ({ navigation }) => {
   return (
     <Tab.Navigator
-      screenOptions={{
-        tabBarStyle: style.tabBarStyle,
-        tabBarLabelStyle: {
+      screenOptions={({ route }) => ({
+        tabBarStyle: {
+          height: 90,
           paddingBottom: 20,
-          fontSize: 13,
           fontWeight: "700",
+          borderTopStartRadius: 30,
+          borderTopEndRadius: 30,
         },
-        tabBarActiveTintColor: "#009CA6",
-      }}
+        tabBarLabelStyle: {
+          fontSize: 15,
+          fontWeight: 600,
+          margin: 0
+        },
+      })}
     >
+
       <Tab.Screen
         name={ROUTE.CONTENT_HOME}
         component={NavigationHome}
         options={({ route }) => ({
-          tabBarStyle: {
-            display: getTabBarVisibility(route),
-            height: 80,
-            flexDirection: 'column',
-          },
           tabBarLabel: "Inicio",
           tabBarIcon: ({ color, size }) => (
             <Entypo name="home" size={size} color={color} />
           ),
+          tabBarActiveTintColor: "#009CA6",
           headerShown: false,
         })}
       />
@@ -57,20 +59,10 @@ const TabHome = ({ navigation }) => {
       <Tab.Screen
         name={ROUTE.CONTENT_PRESCRIPCIONES}
         component={StackPrescripciones}
-        options={{
-          tabBarButton: ({ children, onPress }) => (
-            <TouchableOpacity
-              onPress={() => {
-                navigation.navigate(ROUTE.CONTENT_PRESCRIPCIONES);
-              }}
-              style={{
-                height: 80,
-                alignItems: "center"
-              }}
-            >
-              <View>{children}</View>
-            </TouchableOpacity>
-          ),
+        options={({ route }) => ({
+          tabBarStyle: {
+            display: 'none',
+          },
           tabBarIcon: ({ color, size }) => (
             <View style={style.btn_plus}>
               <Entypo name="plus" size={40} color="#ffffff" />
@@ -78,35 +70,32 @@ const TabHome = ({ navigation }) => {
           ),
           tabBarLabel: "Prescripción",
           tabBarLabelStyle: {
-            color: BLANCO
-          },
-          tabBarStyle: {
-            display: "none",
+            color: "#D2010D",
+            fontSize: 15,
+            fontWeight: 600
           },
           headerShown: false,
-        }}
+        })}
       />
+
       <Tab.Screen
         name={ROUTE.VADEMECUM}
         component={Vademecum}
         options={({ route }) => ({
+          tabBarLabel: "Vademécum",
+          tabBarIcon: ({ color, size }) => (
+            <Entypo name="book" size={size} color={color} />
+          ),
           headerStyle: {
             backgroundColor: NARANJA,
           },
           headerTitleStyle: {
             color: "#FFF",
           },
-          tabBarStyle: {
-            display: getTabBarVisibility(route),
-            height: 80,
-            flexDirection: 'column',
-          },
-          tabBarLabel: "Vademécum",
-          tabBarIcon: ({ color, size }) => (
-            <Entypo name="book" size={size} color={color} />
-          ),
+          tabBarActiveTintColor: NARANJA,
         })}
       />
+
     </Tab.Navigator>
   );
 };
@@ -264,14 +253,6 @@ const StackPrescripciones = ({ navigation }) => {
   );
 };
 
-const getTabBarVisibility = (route) => {
-  const routeName = getFocusedRouteNameFromRoute(route) ?? "Feed";
-  const routes = [ROUTE.PAPER_PRESCRIPCION, ROUTE.PERFIL, ROUTE.EDITAR_PERFIL];
-  if (routes.includes(routeName)) {
-    return "none";
-  }
-};
-
 const AppStack = () => {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
@@ -290,25 +271,27 @@ const style = StyleSheet.create({
     height: 200,
   },
   btn_plus: {
-    width: 65,
-    height: 65,
+    width: 70,
+    height: 70,
+    display: "flex",
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 40,
-    // position: "absolute",
-    // bottom: 5,
-    // marginBottom: 10,
+    position: "absolute",
+    bottom: 5,
     backgroundColor: "#d2010d",
   },
   tabBarStyle: {
-    height: 80,
+    height: 100,
     paddingVertical: 10,
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
     position: "absolute",
-    borderTopEndRadius: 30,
-    borderTopStartRadius: 30,
+    borderTopWidth: 2,
+    borderTopColor: "#000000",
+    // borderTopEndRadius: 30,
+    // borderTopStartRadius: 30,
   },
 });
 

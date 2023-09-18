@@ -10,7 +10,7 @@ export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(null);
   const [data, setData] = useState(null);
 
-  const login = async ({ username = "", password }) => {
+  const login = async ({ username = "" }) => {
     setIsLoading(true);
 
     return await new Promise((resolve, reject) => {
