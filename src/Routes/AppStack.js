@@ -53,6 +53,23 @@ const TabHome = ({ navigation }) => {
           ),
           tabBarActiveTintColor: "#009CA6",
           headerShown: false,
+          tabBarStyle: ((route) => {
+            const routes = [ROUTE.PAPER_PRESCRIPCION, ROUTE.PERFIL, ROUTE.EDITAR_PERFIL];
+            const routeName = getFocusedRouteNameFromRoute(route) ?? ""
+            // console.log(routeName)
+            if (routes.includes(routeName)) {
+              return {
+                display: "none",
+              }
+            }
+            return {
+              height: 90,
+              paddingBottom: 20,
+              fontWeight: "700",
+              borderTopStartRadius: 30,
+              borderTopEndRadius: 30,
+            }
+          })(route),
         })}
       />
 
@@ -68,7 +85,7 @@ const TabHome = ({ navigation }) => {
               <Entypo name="plus" size={40} color="#ffffff" />
             </View>
           ),
-          tabBarLabel: "Prescripción",
+          tabBarLabel: "Generar prescripción",
           tabBarLabelStyle: {
             color: "#D2010D",
             fontSize: 15,
@@ -185,6 +202,9 @@ const NavigationHome = ({ navigation }) => {
               <AntDesign name="arrowleft" size={24} color="white" />
             </TouchableOpacity>
           ),
+          tabBarStyle: {
+            display: 'none',
+          },
         }}
       />
       <Stack.Screen

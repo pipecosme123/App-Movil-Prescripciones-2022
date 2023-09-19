@@ -10,7 +10,7 @@ export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(null);
   const [data, setData] = useState(null);
 
-  const login = async ({ username = "" }) => {
+  const login = async ({ password }) => {
     setIsLoading(true);
 
     return await new Promise((resolve, reject) => {
@@ -18,7 +18,7 @@ export const AuthProvider = ({ children }) => {
         method: GET,
         url: "/login",
         auth: {
-          username,
+          // username,
           password,
         },
       })
@@ -31,6 +31,7 @@ export const AuthProvider = ({ children }) => {
           resolve("Iniciando sesión")
         })
         .catch((err) => {
+          console.log(err);
           reject(err.response.data);
         })
         .finally(() => {

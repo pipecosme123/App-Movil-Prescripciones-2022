@@ -115,7 +115,7 @@ const Prescripciones = ({ navigation }) => {
   };
 
   useEffect(() => {
-
+    console.log('useeffects');
     if (fotos !== false) {
       cargarProductos();
     } else {
@@ -124,6 +124,14 @@ const Prescripciones = ({ navigation }) => {
         type: WARNING,
         message: "Antes de comenzar a prescribir, asegúrate de subir una foto clara de tu firma y sello como odontólogo.",
       })
+
+      setTimeout(() => {
+        setAlert({
+          show: false,
+          type: '',
+          message: '',
+        })
+      }, 7000);
     }
 
   }, []);

@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
   },
   imagen: {
     width: "100%",
-    height: 200,
+    height: 100,
     borderRadius: 10,
   },
   contentImage: {

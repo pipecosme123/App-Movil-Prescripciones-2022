@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Prescripciones Colgate",
-    "slug": "PrescripcionesColgate",
+    "slug": "prescripciones-2023",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -37,7 +37,7 @@
     },
     "extra": {
       "eas": {
-        "projectId": "c7bc21ce-278e-42c5-921d-64b354641e0d"
+        "projectId": "8372b3cd-1887-49b7-a4ed-4f9028a0bc10"
       }
     }
   }

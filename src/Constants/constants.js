@@ -18,6 +18,7 @@ export const ERROR = 'error';
 export const TODOS = "Todos";
 
 export const baseURL = "https://app-prescripciones-colgate.col1.co/api"; 
+// export const baseURL = "http://192.168.1.29:3011/api"; 
 
 // export const AS_TOKEN = 'token';
 // export const AS_TOKEN = 'token';
